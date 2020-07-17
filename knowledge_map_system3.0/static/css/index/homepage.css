@@ -1,0 +1,46 @@
+.my_knowledge_header{
+	margin-top: 36px;
+}
+.my_knowledge_header_text::before{
+	border-left: 4px solid #0073eb;
+}
+.guess-box {
+	/*width: 1022px;*/
+	/*height: 352px;*/
+	/*overflow: hidden;*/
+	background-repeat: repeat;
+	position: relative;
+	top: 1px;
+	padding-top: 22px;
+	box-sizing: border-box;
+	/*background-color: #F9F9F9;*/
+	/*border: 1px solid #F0F0F0;*/
+}
+
+.guess-item {
+	cursor: pointer;
+	transition:all .7s ease 0s;
+	width: 90%;
+	/*width: 239px;*/
+	/*height: 144px;*/
+	border: 1px solid #c9eafd;
+	border-radius: 2px;
+	margin: 14px 0 0px 13px;
+	background-color: #f7fcff;
+	padding: 20px 30px;
+	float: left;
+}
+/*.dropdown-toggle {*/
+/*	background: url(../images/more.gif) no-repeat;*/
+/*}*/
+.dropdown{
+	float:right;
+}
+.icon-til {
+	width: 144px;
+	color: #9c9c9c;
+	font-size: 12px;
+	overflow: hidden;
+	white-space: nowrap;
+	float: left;
+}

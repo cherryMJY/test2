@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue 测试实例</title>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/vue.js"></script>
+</head>
+<body onload="onLoad();">
+<div id="vue_det">
+    <h1>职业 : {{profession}}</h1>
+    <h1>更多中文名 : {{more_chinese_names}}</h1>
+    <h1>奖项 : {{awards}}</h1>
+    <h1>性别 : {{sex}}</h1>
+    <h1>出生地 : {{birth_places}}</h1>
+    <h1>豆瓣url : {{douban_url}}</h1>
+    <h1>姓名 : {{member_name}}</h1>
+    <h1>出演电影 : {{acting_movies}}</h1>
+    <h1>时间 : {{release_date}}</h1>
+</div>
+<div id="tipMsg" ><h2>Let AJAX change this text</h2></div>
+<script type="text/javascript">
+    //alert("123213");
+
+    function onLoad()
+    {
+
+        var post_data = "1";
+
+             $.ajax({
+               url:"/index/deleteEvent",
+               data:{username:"Yuan",password:123},
+               success:function(data){
+                   console.log(data)
+               },
+             });
+
+    }
+
+
+</script>
+</body>
+</html>

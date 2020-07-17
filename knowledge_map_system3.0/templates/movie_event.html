@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery swiper横向时间轴滑块</title>
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+  <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/js/index/movie_event.js"></script>
+  <script src="/static/statics/js/swiper-3.4.2.jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--swiper框架样式-->
+<link rel="stylesheet" type="text/css" href="/static/statics/css/swiper-3.4.2.min.css" />
+
+<!--主要样式-->
+<link rel="stylesheet" type="text/css" href="/static/statics/css/style.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/index.css" />
+<!--插件-->
+
+</head>
+
+<input type="button" class="btn btn-default extract_detail" value="新增类目" />
+
+<div style="float:left;margin-top: 0px;margin-left: 10%;width: 1px;height: 100%; background: grey;"></div>
+  <div class="product-title">电影事件</div>
+  <div class="product-wrapper">
+    <div class="product-body swiper-container">
+      <ul class="features-slide swiper-wrapper" id = "contents">
+
+        <!--
+          {% for item in category %}
+          <li class="features-item swiper-slide">
+          <h3>{{item.date}}</h3>
+          <i></i> <a class="features-info">
+          <p class="features-info-i"></p>
+          <p class="features-info-s"> {{item.event}} </p>
+          </a> </li>
+          {% endfor %}
+        -->
+        <!--
+        <li class="features-item swiper-slide dark">
+          <h3>即将上线</h3>
+          <i></i> <a class="features-info">
+          <p class="features-info-i"></p>
+          <p class="features-info-s"> 本地硬盘自定义RAID等功能 </p>
+          </a> </li>
+        <li class="features-item swiper-slide dark">
+          <h3>即将上线</h3>
+          <i></i> <a class="features-info">
+          <p class="features-info-i"></p>
+          <p class="features-info-s"> 本地硬盘自定义RAID等功能 </p>
+          </a> </li>
+          -->
+      </ul>
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+<hr style=" height:1px;"  color="#C2C2C2"/>
+<div class="product-title">票房统计图</div>
+<div id="line" style="width:1500px;height:400px; margin: 0 auto;background: grey;" ></div>
+<script type="text/javascript" src="/static/js/echarts.min.js"></script>
+<script type="text/javascript" src="/static/js/index.js"></script>
+<!---调用方法-->
+
+</body>
+      <script>
+         $.ajaxSetup({
+             data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+         })
+     </script>
+</html>

@@ -1,0 +1,32 @@
+.user{
+    list-style-type: none;
+    float: right;
+    margin-top: 10px;
+    min-width: 250px;
+}
+.user li{
+	color: white;
+    display:inline;
+    margin-left: 11px;
+    margin-right: 16px;
+}
+.user li a{
+    text-decoration: none;
+	color: white;
+}
+
+.title{
+    float: left;
+    margin-top: 10px;
+    margin-left: 36px;
+    font-size: 38px;
+    width: 304px;
+    color: white;
+}
+#header{
+    width: 100%;
+    height: 80px;
+    background-color: #333;;
+    margin: 0px;
+    padding: 0px;
+}

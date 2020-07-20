@@ -36,20 +36,7 @@ class HanlpUnit:
                 if cut_result[i].split("/")[0] == item["word"]:
                     cut_result[i] = item["word"] + "/" + item["mask"]
                     break
-        return list(cut_result)
-
-    @staticmethod
-    def get_text_subsection_from_html(content):
-        """
-        从html内容提取文本，同时分段
-        :param news:
-        :return:
-        """
-        # news = "<div>" + news + "</div>"
-        soup = BeautifulSoup(content, "lxml")
-        text = soup.find_all(text=True)
-        text = [i.replace(" ", "").replace("\xa0", "") for i in text if i.replace(" ", "").replace("\xa0", "") != '']
-        return text
+        return cut_result
 
     @staticmethod
     def get_text_from_html(text):
@@ -85,16 +72,3 @@ class HanlpUnit:
         """
         for item in self.added_word_list:
             self.CustomDictionary.remove(item["word"])
-
-    @staticmethod
-    def get_text_subsection_from_html(content):
-        """
-        从html内容提取文本，同时分段
-        :param news:
-        :return:
-        """
-        # news = "<div>" + news + "</div>"
-        soup = BeautifulSoup(content, "lxml")
-        text = soup.find_all(text=True)
-        text = [i.replace(" ", "").replace("\xa0", "") for i in text if i.replace(" ", "").replace("\xa0", "") != '']
-        return text

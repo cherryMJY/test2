@@ -1,12 +1,89 @@
 import ast
 
 from Time_NLP.TimeNormalizer import TimeNormalizer # 引入包
-from cocoNLP.extractor import extractor
+from cocoNLP.extractor import extractor, arrow
 from EventTriplesExtraction.triple_extraction import *
+from Time_NLP.hanlpUnit import HanlpUnit
+
 
 class Time_deal():
     def __init__(self):
         a=1
+
+    def dealtime(self,content,timebase):
+        timeformat = arrow.get(timebase).format('YYYY-M-D-H-m-s')
+        timeList = timeformat.split('-')
+        for i in range(6):
+            timeList[i] = int(timeList[i])
+        date_string = content
+        str_len = len(date_string)
+        print(111)
+        if re.match(r'\d+年\d+月\d+日', date_string):
+            ind = 0
+            tmp_num = 0
+            for i in range(0, str_len):
+                if (date_string[i] == ' '):
+                    continue
+                elif (date_string[i] >= '0' and date_string[i] <= '9'):
+                    tmp_num = tmp_num * 10 + ord(date_string[i]) - ord('0')
+                elif (date_string[i] == '年'):
+                    timeList[0] = str(tmp_num)
+                    tmp_num = 0
+                elif (date_string[i] == '月'):
+                    timeList[1] = str(tmp_num)
+                    tmp_num = 0
+                elif (date_string[i] == '日'):
+                    timeList[2] = str(tmp_num)
+                    tmp_num = 0
+            timeStr = ''
+            for i in range(6):
+                if (i == 1 or i == 2):
+                    timeStr += "-"
+                elif (i == 3):
+                    timeStr += " "
+                elif (i == 4 or i == 5):
+                    timeStr += ":"
+                timeStr += str(timeList[i]);
+            return -1,"", timeStr
+        print(222)
+        wordList = ['今天', '明天', '后天', '昨天', '前天']
+        valList = [0, 1, 2, -1, -2]
+        # 这里会有问题
+        print(555)
+        cutResult = HanlpUnit().cut(date_string)
+        print(666)
+        cnt = 0
+        print(cutResult)
+
+        for val in cutResult:
+            tmp = val.split('/')[0]
+            print(tmp)
+            if (tmp in wordList):
+                timeList[2] += valList[cnt]
+                timeStr = ''
+                for i in range(6):
+                    if (i == 1 or i == 2):
+                        timeStr += "-"
+                    elif (i == 3):
+                        timeStr += " "
+                    elif (i == 4 or i == 5):
+                        timeStr += ":"
+                    timeStr += str(timeList[i])
+                #print(cnt, timeStr)
+                return cnt,tmp, timeStr
+            cnt += 1
+        print(444)
+        timeStr = ''
+        for i in range(6):
+            if (i == 1 or i == 2):
+                timeStr += "-"
+            elif (i == 3):
+                timeStr += " "
+            elif (i == 4 or i == 5):
+                timeStr += ":"
+            timeStr += str(timeList[i])
+        print(333)
+        return -1,"",timeStr
 
     def deal_time(self,content,timebase):
         ret_val=timebase

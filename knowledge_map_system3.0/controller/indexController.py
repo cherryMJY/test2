@@ -4007,24 +4007,24 @@ class IndexController(BaseController):
         #更新到mongodb
         #更新neo4j
         #这些都是下标
-        # _id = request.POST['id']
-        # event_time_key_word_index = int(request.POST['event_time_key_word'])
-        # event_place_key_word_index = int(request.POST['event_place_key_word'])
-        # event_subject_key_word_index = int(request.POST['event_subject_key_word'])
-        # event_trigger_word_index = int(request.POST['event_trigger_word'])
-        # event_object_key_word_index = int(request.POST['event_object_key_word'])
-        # actual_event_time = str(request.POST['actual_event_time'])
-        # select_event_type_index =  int(request.POST['select_event_type'])
+        _id = request.POST['id']
+        event_time_key_word_index = int(request.POST['event_time_key_word'])
+        event_place_key_word_index = int(request.POST['event_place_key_word'])
+        event_subject_key_word_index = int(request.POST['event_subject_key_word'])
+        event_trigger_word_index = int(request.POST['event_trigger_word'])
+        event_object_key_word_index = int(request.POST['event_object_key_word'])
+        actual_event_time = str(request.POST['actual_event_time'])
+        select_event_type_index =  int(request.POST['select_event_type'])
 
-        _id = "5ef6e30c7765440d7a6c2616"
-        event_time_key_word_index = 10
-        event_place_key_word_index = 11
-        event_subject_key_word_index = 12
-        event_trigger_word_index = 13
-        event_object_key_word_index = 14
-        actual_event_time = "2020"
-        #这个是事件类目category
-        select_event_type_index =  8
+        # _id = "5ef6e30c7765440d7a6c2616"
+        # event_time_key_word_index = -1
+        # event_place_key_word_index = 11
+        # event_subject_key_word_index = 12
+        # event_trigger_word_index = 13
+        # event_object_key_word_index = 14
+        # actual_event_time = "2020"
+        # #这个是事件类目category
+        # select_event_type_index =  8
         mongodb_id = ObjectId(_id)
 
         try:
@@ -4122,10 +4122,10 @@ class IndexController(BaseController):
         if(event_object_id != -1 ):
             event_extract_result.append({'actual_event_time':actual_event_time,
                                         'time':timeName,
-                                         'timeIndex':event_time_key_word_index,
+                                        'timeIndex':event_time_key_word_index,
                                         'location':locationName,
                                         'locationIndex':event_place_key_word_index,
-                                         'eventName':subjectName+triggerWordName+objectName,
+                                        'eventName':subjectName+triggerWordName+objectName,
                                         'eventSubject':subjectName,
                                         'eventSubjectLabel':self.get_category_name(request,event_subject_category),
                                         'eventSubjectIndex': event_subject_key_word_index,
@@ -4214,23 +4214,23 @@ class IndexController(BaseController):
         event_object     数据类型str  数事件客体
         :return:
         """
-        _id=request.POST['id']
-        index = request.POST['index']
-        time = request.POST['time']
-        location = request.POST['location']
-        event_subject =  request.POST['event_subject']
-        event_name = request.POST['event_name']
-        event_object = request.POST['event_object']
+        # _id=request.POST['id']
+        # index = request.POST['index']
+        # time = request.POST['time']
+        # location = request.POST['location']
+        # event_subject =  request.POST['event_subject']
+        # event_name = request.POST['event_name']
+        # event_object = request.POST['event_object']
 
-        # _id="5ef6e30c7765440d7a6c2616"
-        # index = 0
-        # time = "2020"
-        # location = "123456"
-        # event_subject =  "123"
-        # event_name = "123"
-        # event_object = "123"
-        # request.session['repo_id'] =1
-        # request.session['user_id'] =1
+        _id="5ef6e30c7765440d7a6c2616"
+        index = 0
+        time = "2020"
+        location = "123456"
+        event_subject =  "123"
+        event_name = "123"
+        event_object = "123"
+        request.session['repo_id'] =1
+        request.session['user_id'] =1
 
         repoId = request.session['repo_id']
         createId = request.session['user_id']
@@ -4393,3 +4393,8 @@ class IndexController(BaseController):
         else:
             return self.error("下标超过范围")
         return self.success("添加成功")
+
+    def test111(self,request):
+        from  model.extractUnit import ExtractUnit
+        ExtractUnit().eventExtraction(request,43);
+        return self.success("成功")

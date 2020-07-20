@@ -48,19 +48,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system3.0\model" />
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system3.0\controller" />
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static\js" />
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\templates" />
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\Time_NLP" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system3.0\knowledge_map_system" />
       <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static\css" />
       <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static\images" />
       <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\templates" />
       <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static\dist" />
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system3.0\model" />
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\static\js" />
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\templates" />
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0\Time_NLP" />
-      <recent name="C:\Users\cherryMJY\PycharmProjects\knowledge_map_system2.0" />
     </key>
   </component>
   <component name="RunDashboard">

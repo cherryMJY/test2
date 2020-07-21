@@ -1,0 +1,46 @@
+ul.nav > li{
+    cursor: pointer;
+}
+div.fenci > p {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 6px;
+}
+.color-label > p{
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 6px;
+}
+p.n0{
+    background-color:rgb(239, 238, 238);
+}
+.add_relationship_div{
+    padding-top: 15px;
+}
+.add_word_div{
+    padding-top: 15px;
+}
+.word_transfer_output_div{
+    padding-top: 15px;
+}
+.relationship_word_transfer_input_div{
+    padding-top: 48px;
+}
+.event_word_transfer_input_div{
+    padding-top: 107px;
+}
+.add_word{
+    float: right;
+}
+.add_relationship{
+    float: right;
+}
+.add_event{
+    float: right;
+}

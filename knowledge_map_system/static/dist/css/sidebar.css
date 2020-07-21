@@ -1,0 +1,113 @@
+.sidebar {
+    position: fixed;
+    top: 80px;
+    border-right: 1px solid rgba(0,0,0,.1);
+    box-shadow: 5px 0 20px 0 rgba(0,0,0,.05);
+    width: 220px;
+    height: 800px;
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: -220px;*/
+    bottom: 0;
+    /*background-color: #BE04A7;*/
+    /*overflow: hidden;*/
+}
+
+.headSculpture {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.headSculpture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    margin: 0 auto;
+    transform: translate(0,-135px);
+    transition: all 1s;
+}
+.headSculpture .img{
+    transform: translate(0,0);
+}
+.headSculpture p {
+    margin: 0 auto;
+    margin-top: 15px;
+    font-size: 15px;
+    width: 160px;
+    height: 30px;
+    line-height: 30px;
+    /*background-color: pink;*/
+    border-radius: 15px;
+    /*color: rgba(134, 23, 255, 0.96);*/
+    transform: translate(200px,0);
+    transition: all 1s;
+}
+.headSculpture .opacity{
+    transform: translate(0,0);
+}
+
+.option,
+.option ul li {
+    width: 100%;
+}
+
+.option ul {
+    padding: 15px 0;
+}
+
+.option ul li {
+    display: flex;
+    align-items: center;
+    /*width:195px;*/
+    /*margin-top: 15px;*/
+    padding-left:35px;
+    cursor: pointer;
+    color: #151515;
+    transform: translateZ(0);
+    position: relative;
+    transition-property: color;
+    transition-duration: 0.4s;
+    transition: all 1s;
+}
+.option ul li:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #cacccc;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-out;
+}
+
+/*.option ul li:hover,*/
+/*.option ul li:focus,*/
+/*.option ul li:active {*/
+/*    color: rgba(239, 242, 255, 0.55);*/
+/*}*/
+.option ul li:hover:before,
+.option ul li:focus:before,
+.option ul li:active:before {
+    transform: scaleX(1);
+}
+
+.option ul li img {
+    width: 25px;
+    height: 25px;
+}
+
+.option ul li p {
+    margin-bottom: 0;
+    width: 145px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 15px;
+    padding-left: 15px;
+    margin-left: 10px;
+    letter-spacing: 1px;
+}

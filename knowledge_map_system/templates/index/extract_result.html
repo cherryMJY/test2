@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 Bootstrap -->
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/index/extract_result.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/extract_result.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+
+    <script src="/static/mansory/mp.mansory.js"></script>
+
+    <title>知识图谱构建系统</title>
+
+</head>
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        {% include "sidebar.html" %}
+        <div class="col-sm-10 main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <h2>
+                        <ul class="breadcrumb breadcrumbs_ul">
+                            <li><a href="/index/build_map">建立图谱</a></li>
+                            <li class="active">抽取内容</li>
+                        </ul>
+                    </h2>
+                </div>
+                <div class="my-gallery-container">
+                    {% for context_item in context %}
+                        <div class="card item col-sm-4">
+                            <div class="card-body">
+                                <a class="extract_detail" href="/index/extractResultTagging?_id={{ context_item.id }}">抽取详情</a>
+                                <p><span>_id</span>:<span data-name="_id">{{ context_item.id }}</span></p>
+                                {% for key, value in context_item.value.items %}
+                                    <p><span>{{ key }}</span>:<span data-name="{{ key }}">{{ value }}</span></p>
+                                {% endfor %}
+                                {% if "relationship_extract_result" in context_item %}
+                                    <div class="extract_result">
+                                        <h4>关系抽取结果</h4>
+                                        {% for relationship_item in context_item.relationship_extract_result %}
+                                            <p>{{ relationship_item.object_from_name }}-{{ relationship_item.object_relationship_name }}-{{ relationship_item.object_to_name }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if "event_extract_result" in context_item %}
+                                    <div class="extract_result">
+                                        <h4>事件抽取结果</h4>
+                                        {% for event_item in context_item.event_extract_result %}
+                                            <p>{{ event_item.time }} {{ event_item.location }} {{ event_item.eventName }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>
+                                        <div class="col-sm-5">
+                                            <select class="form-control categote_select">
+                                                <option data-id="-1">其他</option>
+                                                {% for category_item in category %}
+                                                    {% if category_item.category_id == context_item.category_id %}
+                                                        <option data-id="{{ category_item.category_id }}" selected>{{ category_item.category_name }}</option>
+                                                    {% else %}
+                                                        <option data-id="{{ category_item.category_id }}">{{ category_item.category_name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <input type="button" class="col-sm-3 btn btn-default update_entity_info" value="确认"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+{#                      <div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：1</p>#}
+{#                            <p>名字：实体1</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>地址：XXXXX</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    <div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：2</p>#}
+{#                            <p>名字：实体2</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>描述：这是一个实体描述这是一个实体描述这是一个实体描述这是一个实体描述这是一个</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    <div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：3</p>#}
+{#                            <p>称号：实体3</p>#}
+{#                            <p>介绍：无</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    <div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：4</p>#}
+{#                            <p>名字：实体4</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>描述：这是一个实体描述这是一个实体描述这是一个实体描述这是一个实体描述这是一个</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div><div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：2</p>#}
+{#                            <p>名字：实体2</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>属性1：内容1</p>#}
+{#                            <p>属性2：内容2</p>#}
+{#                            <p>描述：这是一个实体描述这是一个实体描述这是一个实体描述这是一个实体描述这是一个</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div><div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：2</p>#}
+{#                            <p>名字：实体2</p>#}
+{#                            <p>描述：这是一个实体描述这是一个实体描述这是一个实体描述这是一个实体描述这是一个</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </div><div class="card item col-sm-4">#}
+{#                        <div class="card-body">#}
+{#                            <p>ID：2</p>#}
+{#                            <p>名字：实体2</p>#}
+{#                            <p>描述：这是一个实体描述这是一个实体描述这是一个实体描述这是一个实体描述这是一个</p>#}
+{#                            <form class="form-horizontal" role="form">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="control-label col-sm-3 form_label" for="attribute_type">类目:</label>#}
+{#                                    <div class="col-sm-4">#}
+{#                                        <select class="form-control" id="attribute_type">#}
+{#                                            <option>类目1</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <input type="button" class="col-sm-4 btn btn-default" value="确认"/>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                      </div>#}
+                </div>
+                <div class="row">
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a class='geraltTb_'>...</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+   </div>
+    <script>
+        let page_info = {{ page_info| safe }};
+        let pagination = $(".pagination");
+        console.log(page_info);
+        let url_common = '/index/extract_result?log_id=' + page_info["log_id"] + '&page=';
+        console.log(url_common);
+        pagination.children().remove();
+        if (page_info["cur_page"] === 1){
+            $("<li><a href='" + url_common + "1'>&laquo;</a></li>").appendTo(pagination);
+        } else {
+            $("<li><a href='" + url_common + (page_info["cur_page"] - 1) + "'>&laquo;</a></li>").appendTo(pagination);
+        }
+        if (page_info["cur_page"] > 4){
+            $("<li><a href='" + url_common + "1'>1</a></li>").appendTo(pagination);
+            $("<li><a class='geraltTb_'>...</a></li>").appendTo(pagination);
+            for (let i=page_info["cur_page"]-2;i<page_info["cur_page"];i++){
+                $("<li><a href='" + url_common + i + "'>" + i + "</a></li>").appendTo(pagination);
+            }
+        } else{
+            for (let i=1;i<page_info["cur_page"];i++){
+                $("<li><a href='" + url_common + i + "'>" + i + "</a></li>").appendTo(pagination);
+            }
+        }
+        $("<li class=\"active\"><a href=\"#\">" + page_info["cur_page"] + "</a></li>").appendTo(pagination);
+
+        if (page_info["cur_page"] < page_info["total_page"] - 3){
+            for (let i=page_info["cur_page"]+1;i<page_info["cur_page"]+3;i++){
+                $("<li><a href='" + url_common + i + "'>" + i + "</a></li>").appendTo(pagination);
+            }
+            $("<li><a class='geraltTb_'>...</a></li>").appendTo(pagination);
+            $("<li><a href='" + url_common + page_info["total_page"] + "'>" + page_info["total_page"] + "</a></li>").appendTo(pagination);
+        } else {
+            for (let i=page_info["cur_page"]+1;i<=page_info["total_page"];i++){
+                $("<li><a href='" + url_common + i + "'>" + i + "</a></li>").appendTo(pagination);
+            }
+        }
+
+        if (page_info["cur_page"] === page_info["total_page"]){
+            $("<li><a href='" + url_common + page_info["total_page"] + "'>&raquo;</a></li>").appendTo(pagination);
+        } else {
+            $("<li><a href='" + url_common + (page_info["cur_page"] + 1) + "'>&raquo;</a></li>").appendTo(pagination);
+        }
+    </script>
+</body>
+</html>

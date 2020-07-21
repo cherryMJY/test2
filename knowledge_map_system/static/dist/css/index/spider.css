@@ -1,0 +1,11 @@
+.breadcrumbs_ul{
+    background-color: unset!important;
+}
+
+.add_spider{
+    margin-bottom: 20px;
+    padding-left: 15px;
+}
+#myModal{
+    z-index: 3000;
+}

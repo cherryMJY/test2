@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 Bootstrap -->
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/index/lc_switch.js"></script>
+    <script src="/static/dist/js/index/cleanning_rule.js"></script>
+{#    <script src="/static/js/index/homepage.js"></script>#}
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/cleanning_rule.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+
+    <title>知识图谱构建系统</title>
+
+</head>
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        {% include "sidebar.html" %}
+        <div class="col-sm-10 main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <h2>
+                        <ul class="breadcrumb breadcrumbs_ul">
+                            <li><a href="/index/build_map">建立图谱</a></li>
+                            <li class="active">配置清洗规则</li>
+                        </ul>
+                    </h2>
+                </div>
+                <div class="row category_select_div">
+                    <form role="form" class="form-horizontal">
+                        <div class="form-group col-sm-6">
+                            <label for="name" class="col-sm-2 control-label category_select_label">类目:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control category_select">
+                                    {% for item in category %}
+                                        <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                    {% endfor %}
+{#                                  <option>类目1</option>#}
+{#                                  <option>类目2</option>#}
+{#                                  <option>类目3</option>#}
+{#                                  <option>类目4</option>#}
+{#                                  <option>5</option>#}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <table class="table table-striped table-hover" id="dataTables-example">
+                        <thead>
+                            <tr class="rule_tr">
+                                <th>编号</th>
+                                <th>属性</th>
+                                <th>属性类型</th>
+                                <th>单/多值</th>
+                                <th>清洗规则</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="cleaning_rule_tbody">
+                            {% for item in cleaning_rule %}
+                                <tr>
+                                    <td class="cleaning_rule_id">{{ item.id }}</td>
+                                    <td>{{ item.attribute.attribute_name }}</td>
+                                    <td>{{ item.attribute.attribute_datatype }}</td>
+                                    {% if item.attribute.is_single_value == 1 %}
+                                        <td>单值</td>
+                                    {% else %}
+                                        <td>多值</td>
+                                    {% endif %}
+                                    <td>
+                                        <div class="form-inline">
+                                            <label>自定义</label>
+                                            <div class="lcs_wrap">
+                                                {% if item.is_custom == 1 %}
+                                                    <input type="checkbox" name="check-1" class="lcs_check" autocomplete="off" checked>
+                                                    <div class="lcs_switch lcs_checkbox_switch lcs_on">
+                                                {% else %}
+                                                    <input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off">
+                                                    <div class="lcs_switch lcs_checkbox_switch lcs_off">
+                                                {% endif %}
+                                                    <div class="lcs_cursor"></div>
+                                                    <div class="lcs_label lcs_label_on">ON</div>
+                                                    <div class="lcs_label lcs_label_off">OFF</div>
+                                                </div>
+                                            </div>
+                                            {% if item.is_custom == 1 %}
+                                                <input type="text" class="custom_input form-control" id="attribute_name"
+                                                               placeholder="请输入正则表达式">
+                {#                                <input type="checkbox" name="smsenable" id="smsenable" />#}
+                                                <select class="un_custom_input form-control" style="display:none;">
+                                                    <option>不清洗</option>
+                                                    {% if item.attribute.attribute_datatype == "日期" %}
+                                                        <option>yyyy-MM-dd</option>
+                                                        <option>yyyy-MM</option>
+                                                        <option>yyyy-MM-dd HH:mm:ss</option>
+                                                    {% elif item.attribute.attribute_datatype == "数字" %}
+                                                        <option>整数</option>
+                                                        <option>保留小数点后面1位</option>
+                                                        <option>保留小数点后面2位</option>
+                                                        <option>保留小数点后面3位</option>
+                                                    {% endif %}
+                                                </select>
+                                            {% else %}
+                                                <input type="text" class="custom_input form-control" id="attribute_name"
+                                                               placeholder="请输入正则表达式" style="display:none;">
+                {#                                <input type="checkbox" name="smsenable" id="smsenable" />#}
+                                                <select class="un_custom_input form-control">
+                                                    <option data-id="-1">不清洗</option>
+                                                    {% if item.attribute.attribute_datatype == "时间" %}
+                                                        <option data-id="4">yyyy-MM-dd</option>
+                                                        <option data-id="5">yyyy-MM</option>
+                                                        <option data-id="6">yyyy-MM-dd HH:mm:ss</option>
+                                                    {% elif item.attribute.attribute_datatype == "数字" %}
+                                                        <option data-id="0">整数</option>
+                                                        <option data-id="1">保留小数点后面1位</option>
+                                                        <option data-id="2">保留小数点后面2位</option>
+                                                        <option data-id="3">保留小数点后面3位</option>
+                                                    {% endif %}
+                                                </select>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td><input type="button" class="btn btn-default update_cleaning_rule" value="保存"/></td>
+                                </tr>
+                            {% endfor %}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">1</span></td>#}
+{#                            <td class="project-name"><span>属性1</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>字符串</span>#}
+{#                            </td>#}
+{#                              <td class="project-progress progress-all">#}
+{#                              <span>单值</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <div class="form-inline">#}
+{#                                    <label>自定义</label>#}
+{#                                    <div class="lcs_wrap">#}
+{#                                        <input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off">#}
+{#                                        <div class="lcs_switch  lcs_checkbox_switch lcs_off">#}
+{#                                            <div class="lcs_cursor"></div>#}
+{#                                            <div class="lcs_label lcs_label_on">ON</div>#}
+{#                                            <div class="lcs_label lcs_label_off">OFF</div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <input type="text" class="custom_input form-control" id="attribute_name"#}
+{#                                                   placeholder="请输入正则表达式" style="display:none;">#}
+    {#                                <input type="checkbox" name="smsenable" id="smsenable" />#}
+{#                                    <select class="un_custom_input form-control">#}
+{#                                        <option>不清洗</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </td>#}
+{#                              <td>#}
+{#                                  <input type="button" class="btn btn-default" value="保存"/>#}
+{#                              </td>#}
+{#                          </tr>#}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">2</span></td>#}
+{#                            <td class="project-name"><span>属性2</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>日期</span>#}
+{#                            </td>#}
+{#                              <td class="project-progress progress-all">#}
+{#                              <span>多值</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <div class="form-inline">#}
+{#                                    <label>自定义</label>#}
+{#                                    <div class="lcs_wrap">#}
+{#                                        <input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off">#}
+{#                                        <div class="lcs_switch  lcs_checkbox_switch lcs_off">#}
+{#                                            <div class="lcs_cursor"></div>#}
+{#                                            <div class="lcs_label lcs_label_on">ON</div>#}
+{#                                            <div class="lcs_label lcs_label_off">OFF</div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <input type="text" class="custom_input form-control" id="attribute_name"#}
+{#                                                   placeholder="请输入正则表达式" style="display:none;">#}
+    {#                                <input type="checkbox" name="smsenable" id="smsenable" />#}
+{#                                    <select class="un_custom_input form-control">#}
+{#                                      <option>不清洗</option>#}
+{#                                      <option>yyyy-MM-dd</option>#}
+{#                                        <option>yyyy-MM</option>#}
+{#                                        <option>yyyy-MM-dd HH:mm:ss</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </td>#}
+{#                              <td>#}
+{#                                  <input type="button" class="btn btn-default" value="保存"/>#}
+{#                              </td>#}
+{#                          </tr>#}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">3</span></td>#}
+{#                            <td class="project-name"><span>属性3</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>数字</span>#}
+{#                            </td>#}
+{#                              <td class="project-progress progress-all">#}
+{#                              <span>单值</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <div class="form-inline">#}
+{#                                    <label>自定义</label>#}
+{#                                    <div class="lcs_wrap">#}
+{#                                        <input type="checkbox" name="check-1" value="4" class="lcs_check" autocomplete="off">#}
+{#                                        <div class="lcs_switch  lcs_checkbox_switch lcs_off">#}
+{#                                            <div class="lcs_cursor"></div>#}
+{#                                            <div class="lcs_label lcs_label_on">ON</div>#}
+{#                                            <div class="lcs_label lcs_label_off">OFF</div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <input type="text" class="custom_input form-control" id="attribute_name"#}
+{#                                                   placeholder="请输入正则表达式" style="display:none;">#}
+    {#                                <input type="checkbox" name="smsenable" id="smsenable" />#}
+{#                                    <select class="un_custom_input form-control">#}
+{#                                      <option>不清洗</option>#}
+{#                                      <option>整数</option>#}
+{#                                      <option>保留小数点后面1位</option>#}
+{#                                      <option>保留小数点后面2位</option>#}
+{#                                      <option>保留小数点后面3位</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </td>#}
+{#                              <td>#}
+{#                                  <input type="button" class="btn btn-default" value="保存"/>#}
+{#                              </td>#}
+{#                          </tr>#}
+
+{#                                        <td>当前没有爬虫项目可运行!!!</td>#}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+   </div>
+    <script>
+            $(document).ready(function(e) {
+                $('input').lc_switch();
+                // triggered each time a field changes status
+                $('body').delegate('.lcs_check', 'lcs-statuschange', function() {
+                    var status = ($(this).is(':checked')) ? 'checked' : 'unchecked';
+                    console.log('field changed status: '+ status );
+                });
+
+                // triggered each time a field is checked
+                $('body').delegate('.lcs_check', 'lcs-on', function() {
+                    console.log('field is checked');
+                });
+
+
+                // triggered each time a is unchecked
+                $('body').delegate('.lcs_check', 'lcs-off', function() {
+                    console.log('field is unchecked');
+                });
+            });
+	</script>
+</body>
+</html>

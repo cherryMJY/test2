@@ -1,0 +1,27 @@
+<!-- 侧边栏 -->
+<div class="col-sm-2 sidebar">
+    <div class="headSculpture">
+        <a href="/index/homepage"><      返回知识库</a>
+        <p class="opacity">ID:{{ repo_id }}</p>
+        <h5>{{ repo_name }}</h5>
+    </div>
+    <div class="option">
+        <ul>
+           <li onclick="window.location.href='/index/knowledge_definition'">
+              <p>知识定义</p>
+           </li>
+           <li onclick="window.location.href='/index/knowledge_acquire'">
+              <p>获取数据</p>
+           </li>
+           <li onclick="window.location.href='/index/build_map'">
+              <p>建立图谱</p>
+           </li>
+           <li onclick="window.location.href='#'">
+              <p>类目挖掘</p>
+           </li>
+           <li onclick="window.location.href='/index/show_entity'">
+              <p>查看图谱</p>
+           </li>
+        </ul>
+    </div>
+</div>

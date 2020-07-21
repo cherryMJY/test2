@@ -1,0 +1,6 @@
+.breadcrumbs_ul{
+    background-color: unset!important;
+}
+#myModal{
+    z-index: 3000;
+}

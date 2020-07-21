@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 Bootstrap -->
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/index/map_rule.js"></script>
+{#    <script src="/static/js/index/homepage.js"></script>#}
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/map_rule.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+
+    <!-- DataTables css -->
+    <link rel="stylesheet" href="/static/datatables/media/css/dataTables.bootstrap.min.css">
+
+    <title>知识图谱构建系统</title>
+
+</head>
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        {% include "sidebar.html" %}
+        <div class="col-sm-10 main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <h2>
+                        <ul class="breadcrumb breadcrumbs_ul">
+                            <li><a href="/index/build_map">建立图谱</a></li>
+                            <li class="active">配置映射规则</li>
+                        </ul>
+                    </h2>
+                </div>
+                <div class="row category_select_div">
+                    <form role="form" class="form-horizontal">
+                        <div class="form-group col-sm-6">
+                          <label for="name" class="col-sm-2 control-label category_select_label">类目:</label>
+                          <div class="col-sm-8">
+                            <select class="form-control" id="category_select">
+                                {% for item in category %}
+                                    <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                {% endfor %}
+{#                              <option>类目1</option>#}
+{#                              <option>类目2</option>#}
+{#                              <option>类目3</option>#}
+{#                              <option>类目4</option>#}
+{#                              <option>5</option>#}
+                            </select>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <table class="table table-striped table-hover" id="dataTables-example">
+                        <thead>
+                            <tr class="rule_tr">
+                                <th>编号</th>
+                                <th>文档重抽取的属性</th>
+                                <th>实体覆盖率</th>
+                                <th>映射属性</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="attribute_map_tbody">
+                            {% for attribute_mapping_item in attribute_mapping %}
+                                <tr>
+                                    <td class="map_rule_id">{{ attribute_mapping_item.id }}</td>
+                                    <td>{{ attribute_mapping_item.attribute_name }}</td>
+                                    <td>{{ attribute_mapping_item.coverage_rate }}%</td>
+                                    <td>
+                                        <select class="form-control map_attribute_id">
+                                            <option data-id="-1">不映射</option>
+                                            {% for attribute_item in attribute %}
+                                                {% if attribute_item.id == attribute_mapping_item.map_attribute_id %}
+                                                    <option data-id="{{ attribute_item.id }}" selected = "selected">{{ attribute_item.attribute_name }}</option>
+                                                {% else %}
+                                                    <option data-id="{{ attribute_item.id }}">{{ attribute_item.attribute_name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+{#                                            <option>不映射</option>#}
+{#                                            <option>类目2</option>#}
+{#                                            <option>类目3</option>#}
+{#                                            <option>类目4</option>#}
+{#                                            <option>5</option>#}
+                                        </select>
+                                    </td>
+                                    <td><input type="button" class="btn btn-default update_mapping_rule" value="提交"/></td>
+                                </tr>
+                            {% endfor %}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">1</span></td>#}
+{#                            <td class="project-name"><span>属性1</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>100%</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <select class="form-control">#}
+{#                                  <option>不映射</option>#}
+{#                                  <option>类目2</option>#}
+{#                                  <option>类目3</option>#}
+{#                                  <option>类目4</option>#}
+{#                                  <option>5</option>#}
+{#                                </select>#}
+{#                            </td>#}
+{#                          </tr>#}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">2</span></td>#}
+{#                            <td class="project-name"><span>属性2</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>80%</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <select class="form-control">#}
+{#                                  <option>不映射</option>#}
+{#                                  <option>类目2</option>#}
+{#                                  <option>类目3</option>#}
+{#                                  <option>类目4</option>#}
+{#                                  <option>5</option>#}
+{#                                </select>#}
+{#                            </td>#}
+{#                          </tr>#}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">3</span></td>#}
+{#                            <td class="project-name"><span>属性3</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>100%</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <select class="form-control">#}
+{#                                  <option>不映射</option>#}
+{#                                  <option>类目2</option>#}
+{#                                  <option>类目3</option>#}
+{#                                  <option>类目4</option>#}
+{#                                  <option>5</option>#}
+{#                                </select>#}
+{#                            </td>#}
+{#                          </tr>#}
+{#                          <tr data-name="{{ project.id }}">#}
+{#                            <td class="project-group"><span class="editable editable-click editable-empty">4</span></td>#}
+{#                            <td class="project-name"><span>属性4</span></td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                              <span>80%</span>#}
+{#                            </td>#}
+{#                            <td class="project-progress progress-all">#}
+{#                                <select class="form-control">#}
+{#                                  <option>不映射</option>#}
+{#                                  <option>类目2</option>#}
+{#                                  <option>类目3</option>#}
+{#                                  <option>类目4</option>#}
+{#                                  <option>5</option>#}
+{#                                </select>#}
+{#                            </td>#}
+{#                          </tr>#}
+{#                                        <td>当前没有爬虫项目可运行!!!</td>#}
+                        </tbody>
+                    </table>
+                    {% if attribute_mapping|length == 0  %}
+                        <div class="no_data_div" style="display: block;">暂无数据</div>
+                    {% else %}
+                        <div class="no_data_div" style="display: none;">暂无数据</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+   </div>
+</body>
+</html>

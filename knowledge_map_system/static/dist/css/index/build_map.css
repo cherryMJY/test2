@@ -1,0 +1,10 @@
+.ul_function_select{
+    margin-top: 17px;
+    margin-bottom: 39px;
+}
+.function_btn{
+    height: 50px;
+}
+.function_btn > input{
+    width: 120px;
+}

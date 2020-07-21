@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 Bootstrap -->
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/index/knowledge_definition.js"></script>
+
+    <!-- tagsinput 核心 JS 文件 -->
+    <script src="/static/jquery-tagsinput/js/jquery-tagsinput.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/jquery-tagsinput/css/jquery-tagsinput.min.css">
+{#    <script src="/static/js/index/homepage.js"></script>#}
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/knowledge_definition.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+    <script>
+        $.ajaxSetup({
+            data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+        })
+    </script>
+    <title>知识图谱构建系统</title>
+</head>
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        {% include "sidebar.html" %}
+        <div class="col-sm-10 main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <h1>定义知识类目及属性</h1>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div id="container1">
+                            <div class="row">
+                                <h4 class="col-sm-6">类目</h4>
+                                <input type="button" class="col-sm-5 btn btn-default" value="新增类目" data-toggle="modal" data-target="#myModal"/>
+                            </div>
+                            <div>
+                                <span class="frist-title">
+                                    <i class="glyphicon glyphicon-chevron-right myicon" style="font-size: 15px;color: #337ab7; display: none;"></i>
+                                    <i class="glyphicon glyphicon-chevron-down myicon" style="font-size: 15px;color: #337ab7;"></i>
+                                </span>
+                                <span class="category" id="1">事物</span>
+                            </div>
+                            <ul class="second-wrapper sub-category1" style="display: block;">
+                                {% for item in first_tree.level2_child %}
+                                    <li>
+                                        <div>
+                                            <span class="second-title">
+                                                <i class="glyphicon glyphicon-chevron-right myicon" style="font-size: 15px;color: #337ab7;display: none;"></i>
+                                                <i class="glyphicon glyphicon-chevron-down myicon" style="font-size: 15px;color: #337ab7;"></i>
+                                            </span>
+                                            <span class="category" id="{{ item.id }}">{{ item.category_name }}</span>
+                                        </div>
+                                        <dl class="three-wrapper" style="display: block;">
+                                            {% for level3_item in item.level3_child %}
+{#                                                <dd class="nav" id="{{ level3_item.id }}">{{ level3_item.category_name }}</dd>#}
+                                                <dd class="category" id="{{ level3_item.id }}">{{ level3_item.category_name }}</dd>
+                                            {% endfor %}
+                                        </dl>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div>
+                                <span class="frist-title">
+                                    <i class="glyphicon glyphicon-chevron-right myicon" style="font-size: 15px;color: #337ab7; display: none;"></i>
+                                    <i class="glyphicon glyphicon-chevron-down myicon" style="font-size: 15px;color: #337ab7;"></i>
+                                </span>
+                                <span class="category" id="2">事件</span>
+                            </div>
+                            <ul class="second-wrapper sub-category2" style="display: block;">
+                                {% for item in second_tree.level2_child %}
+                                    <li>
+                                        <div>
+                                            <span class="second-title">
+                                                <i class="glyphicon glyphicon-chevron-right myicon" style="font-size: 15px;color: #337ab7;display: none;"></i>
+                                                <i class="glyphicon glyphicon-chevron-down myicon" style="font-size: 15px;color: #337ab7;"></i>
+                                            </span>
+                                            <span class="category" id="{{ item.id }}">{{ item.category_name }}</span>
+                                        </div>
+                                        <dl class="three-wrapper" style="display: block;">
+                                            {% for level3_item in item.level3_child %}
+{#                                                <dd class="nav" id="{{ level3_item.id }}">{{ level3_item.category_name }}</dd>#}
+                                                <dd class="category" id="{{ level3_item.id }}">{{ level3_item.category_name }}</dd>
+                                            {% endfor %}
+                                        </dl>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row category_header">
+                            <h3 id="category_name_show" data-id="1">事物</h3>
+                        </div>
+                        <div class="row category_title">
+                            <i class="glyphicon glyphicon-tags title-tag"></i>
+                            <span>类目描述</span>
+                        </div>
+                        <div class="row">
+                            {% if first_tree.category.category_description == "" %}
+                                <p id="category_describe_show">暂无</p>
+                            {% else %}
+                                <p id="category_describe_show">{{ first_tree.category.category_description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="event_rule_define_div" style="display: none">
+                            <div class="row event_rule_title category_title">
+                                <i class="glyphicon glyphicon-tags title-tag"></i>
+                                <span>定义规则</span>
+                            </div>
+                            <div class="row event_rule_body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="event_subject">事件主体:</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="event_subject">
+                                                <option>电影</option>
+                                                <option>数字</option>
+                                                <option>日期时间</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="event_object">事件客体:</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="event_object">
+                                                <option>无</option>
+                                                <option>数字</option>
+                                                <option>日期时间</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="event_algorithm">算法:</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="event_algorithm">
+                                                <option>无</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="trigger_word">触发词:</label>
+                                        <div class="col-sm-8 trigger-word-div">
+                                            <input class="trigger_word" data-role='tags-input' value="First;Second;Third;" />
+                                        </div>
+                                    </div>
+                                </form>
+                                <div style="text-align: right;">
+                                    <input type="button" class="btn btn-primary save_eveny_rule" value="保存规则" style="width: 125px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="row category_title">
+                                <i class="glyphicon glyphicon-tags title-tag"></i>
+                                <span>自有属性</span>
+                            </div>
+                            <div class="row add_attribute_div" style="display: none;">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="attribute_name">属性名称：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control col-sm-3" id="attribute_name"
+                                                   required="required" placeholder="请输入属性的名称">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="inputfile">属性别名：</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="attribute_alias"
+                                                placeholder="请输入属性的别名">
+                                        </div>
+                                    </div>
+    {#                            </form>#}
+    {#                            <form class="form-horizontal" role="form">#}
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="attribute_type">属性类型:</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" id="attribute_type">
+                                                <option>字符串</option>
+                                                <option>数字</option>
+                                                <option>日期时间</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="attribute_is_single_value">
+                                                <option data-id="1">单值</option>
+                                                <option data-id="0">多值</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6 relationship_algorithm_div" style="display: none;">
+                                        <label class="control-label col-sm-3 form_label" for="relationship_algorithm">算法:</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="relationship_algorithm">
+                                                <option data-id="-1">无</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label class="control-label col-sm-3 form_label" for="attribute_describe">属性描述:</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" rows="1" id="attribute_describe"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div style="text-align: right;">
+                                    <input type="button" class="btn btn-primary add_attribute" value="添加属性" style="width: 125px;"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>属性名称</th>
+                                            <th>属性别称</th>
+                                            <th>属性类型</th>
+                                            <th>单/多值</th>
+                                            <th>描述</th>
+                                            <th>创建时间</th>
+                                            <th class="attribute_operation" style="display: none;">操作</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody class="attribute_tbody">
+                                            {% for item in first_tree.category.attribute %}
+                                                <tr>
+                                                    <td>{{ item.attribute_name }}</td>
+                                                    {% if item.attribute_alias == "" %}
+                                                        <td>暂无</td>
+                                                    {% else %}
+                                                        <td data-value="{{ item.attribute_alias }}">{{ item.attribute_alias }}</td>
+                                                    {% endif %}
+                                                    <td>{{ item.attribute_datatype }}</td>
+                                                    {% if item.is_single_value == 1 %}
+                                                        <td>单值</td>
+                                                    {% else %}
+                                                        <td>多值</td>
+                                                    {% endif %}
+                                                    {% if item.attribute_description == "" %}
+                                                        <td>暂无</td>
+                                                    {% else %}
+                                                        <td data-value="{{ item.attribute_description }}">{{ item.attribute_description }}</td>
+                                                    {% endif %}
+                                                    <td>{{ item.create_time }}</td>
+                                                </tr>
+                                            {% endfor %}
+    {#                                        <tr>#}
+    {#                                            <td>属性1</td>#}
+    {#                                            <td>别称1，别称2</td>#}
+    {#                                            <td>字符串</td>#}
+    {#                                            <td>单值</td>#}
+    {#                                            <td></td>#}
+    {#                                            <td>2020-03-16 17:13:36</td>#}
+    {#                                            <td>#}
+    {#                                                <input type="button" class="btn btn-default" value="修改" data-toggle="modal" data-target="#myModal2"/>#}
+    {#                                                <input type="button" class="btn btn-default" value="删除"/>#}
+    {#                                            </td>#}
+    {#                                        </tr>#}
+    {#                                        <tr>#}
+    {#                                            <td>属性2</td>#}
+    {#                                            <td>别称3，别称4</td>#}
+    {#                                            <td>字符串</td>#}
+    {#                                            <td>单值</td>#}
+    {#                                            <td>.........</td>#}
+    {#                                            <td>2020-03-16 17:13:36</td>#}
+    {#                                            <td>#}
+    {#                                                <input type="button" class="btn btn-default" value="修改" data-toggle="modal" data-target="#myModal2"/>#}
+    {#                                                <input type="button" class="btn btn-default" value="删除"/>#}
+    {#                                            </td>#}
+    {#                                        </tr>#}
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="father_attribute_tables">
+                            <div class="row category_title">
+                                <i class="glyphicon glyphicon-tags title-tag"></i>
+                                <span>继承属性</span>
+                            </div>
+{#                            <div class="row">#}
+{#                                <table class="table table-striped table-hover">#}
+{#                                    <thead>#}
+{#                                        <tr>#}
+{#                                            <th>属性名称</th>#}
+{#                                            <th>属性别称</th>#}
+{#                                            <th>属性类型</th>#}
+{#                                            <th>单/多值</th>#}
+{#                                            <th>描述</th>#}
+{#                                            <th>创建时间</th>#}
+{#                                        </tr>#}
+{#                                    </thead>#}
+{#                                        <tbody>#}
+{#                                            <tr>#}
+{#                                                <td>属性3</td>#}
+{#                                                <td>别称6</td>#}
+{#                                                <td>字符串</td>#}
+{#                                                <td>单值</td>#}
+{#                                                <td>.........</td>#}
+{#                                                <td>2020-03-16 17:13:36</td>#}
+{#                                            </tr>#}
+{#                                            <tr>#}
+{#                                                <td>属性4</td>#}
+{#                                                <td>别称7</td>#}
+{#                                                <td>字符串</td>#}
+{#                                                <td>单值</td>#}
+{#                                                <td>..............</td>#}
+{#                                                <td>2020-03-16 17:13:36</td>#}
+{#                                            </tr>#}
+{#                                        </tbody>#}
+{#                                </table>#}
+{#                                <div class="no_data_div">暂无数据</div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+
+    <!-- 模态框1，新增类目 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增类目
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="category_name" class="col-sm-2 control-label">类目名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="category_name"
+                                       placeholder="请输入名字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inherit_category" class="col-sm-2 control-label">继承类目</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="inherit_category">
+                                    <option data-id="1">事物</option>
+                                    <option data-id="2">事件</option>
+                                    {% for item in first_tree.level2_child %}
+                                        <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                    {% endfor %}
+                                    {% for item in second_tree.level2_child %}
+                                        <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category_describe" class="col-sm-2 control-label">类目描述</label>
+                            <div class="col-sm-10">
+                                <textarea id="category_describe" class="form-control" style="resize:none;" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="add_category">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- 模态框2，修改属性 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        修改属性
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal attribute_update_form" role="form">
+                        <div class="form-group">
+                            <label for="attribute_name_update" class="col-sm-2 control-label">属性名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="attribute_name_update">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="attribute_alias_update" class="col-sm-2 control-label">属性别称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="attribute_alias_update">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="attribute_type_update" class="col-sm-2 control-label">属性类型</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="attribute_type_update">
+                                            <option>字符串</option>
+                                            <option>数字</option>
+                                            <option>日期时间</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="attribute_is_single_value_update">
+                                            <option data-id="1">单值</option>
+                                            <option data-id="0">多值</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group relationship_algorithm_update_div" style="display: none;">
+                            <label for="relationship_algorithm_update" class="col-sm-2 control-label">算法</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="relationship_algorithm_update">
+                                    <option data-id="-1">无</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="attribute_describe_update" class="col-sm-2 control-label">属性描述</label>
+                            <div class="col-sm-10">
+                                <textarea id="attribute_describe_update" class="form-control" style="resize:none;" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="attribute_update">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <script>
+	    $(document).ready(function() {
+	      $('[data-role="tags-input"]').tagsInput();
+	    });
+    </script>
+</body>
+</html>

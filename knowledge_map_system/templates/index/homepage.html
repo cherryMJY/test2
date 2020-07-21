@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入 Bootstrap -->
+      <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+      <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+     <script>
+        $.ajaxSetup({
+            data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+        })
+    </script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/index/homepage.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/homepage.css">
+    <title>Title</title>
+</head>
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        <div class="container" style="padding-left: 2%; padding-right: 2%; padding-top: 80px;">
+            <div class="row my_knowledge_header">
+                <div class="col-lg-2"><h4 class="text-light my_knowledge_header_text"><img src="/static/images/003a_01.png"> 我的知识图谱库</h4></div>
+                <div class="col-lg-2"><input type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" value="新建知识库"></div>
+                <!-- 模态框（Modal） -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    新建知识库
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label for="repo_name_add" class="col-sm-2 control-label">库名</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="repo_name_add"
+                                                   placeholder="请输入名字">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="repo_describe_add" class="col-sm-2 control-label">描述</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="repo_describe_add" class="form-control" style="resize:none;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                </button>
+                                <button type="button" class="btn btn-primary" id="add_repo">
+                                    提交
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
+            </div>
+            <div class="guess-box row">
+                <div class="col-lg-12">
+                    {% for item in repo_list %}
+                        <div class="col-lg-4">
+                            <div class="guess-item">
+                                <div  class="dropdown">
+                                    <span class="dropdown-toggle dropdownMenu1" data-toggle="dropdown"><img src="/static/images/more.gif"></span>
+                                    <ul class="dropdown-menu dropDownCur">
+                                        <li><a href="#" data-toggle="modal" data-target="#myModa2">修改</a></li>
+                                        <li><a href="#" class="delete_repo">删除</a></li>
+                                    </ul>
+                                </div>
+                                <p class="guess-item-text repo_name"><a href="#" class="repo_name_a">{{ item.repo_name }}</a></p>
+                                <p class="clearfix guess-mba"> <span class="icon-til repo_id" id="{{ item.id }}">ID：{{ item.id }}</span> </p>
+                                <p class="clearfix"><span class="icon-til">时间：<span class="repo_time">{{ item.create_time }}</span></span> </p>
+                                <p class="clearfix"><span class="icon-til">简述：<span class="repo_describe">{{ item.repo_description }}</span></span> </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+{#                    <div class="col-lg-4">#}
+{#                        <div class="guess-item"><a href="javascript:;">#}
+{#                            <div  class="dropdown">#}
+{#                                <span class="dropdown-toggle dropdownMenu1" data-toggle="dropdown"><img src="/static/images/more.gif"></span>#}
+{#                                <ul class="dropdown-menu dropDownCur">#}
+{#                                    <li><a href="#" data-toggle="modal" data-target="#myModa2">修改</a></li>#}
+{#                                    <li><a href="#">删除</a></li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                            <p class="guess-item-text repo_name">知识图谱2</p>#}
+{#                            <p class="clearfix guess-mba"> <span class="icon-til repo_id" id="2">ID：2</span> </p>#}
+{#                            <p class="clearfix"><span class="icon-til repo_describe">描述：</span> </p>#}
+{#                            </a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-lg-4">#}
+{#                        <div class="guess-item"><a href="javascript:;">#}
+{#                            <div class="dropdown">#}
+{#                                <span class="dropdown-toggle dropdownMenu1" data-toggle="dropdown"><img src="/static/images/more.gif"></span>#}
+{#                                <ul class="dropdown-menu dropDownCur">#}
+{#                                    <li><a href="#">修改</a></li>#}
+{#                                    <li><a href="#">删除</a></li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                            <p class="guess-item-text">知识图谱3</p>#}
+{#                            <p class="clearfix guess-mba"> <span class="icon-til">ID：3</span> </p>#}
+{#                            <p class="clearfix"><span class="icon-til">描述：测试</span> </p>#}
+{#                            </a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-lg-4">#}
+{#                        <div class="guess-item"><a href="javascript:;">#}
+{#                            <div class="dropdown">#}
+{#                                <span class="dropdown-toggle dropdownMenu1" data-toggle="dropdown"><img src="/static/images/more.gif"></span>#}
+{#                                <ul class="dropdown-menu dropDownCur">#}
+{#                                    <li><a href="#">修改</a></li>#}
+{#                                    <li><a href="#">删除</a></li>#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                            <p class="guess-item-text">知识图谱4</p>#}
+{#                            <p class="clearfix guess-mba"> <span class="icon-til">ID：4</span> </p>#}
+{#                            <p class="clearfix"><span class="icon-til">描述：测试</span> </p>#}
+{#                            </a>#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        修改知识库
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="base_id" class="col-sm-2 control-label">ID</label>
+                            <label for="base_id" class="col-sm-2 control-label" id="repo_id_update">1</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="repo_name_update" class="col-sm-2 control-label">库名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="repo_name_update"
+                                       placeholder="请输入名字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="repo_describe_update" class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" style="resize:none;" rows="3" id="repo_describe_update"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="update_repo">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</body>
+</html>

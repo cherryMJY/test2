@@ -1,0 +1,306 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>分析结果</title>
+
+    <link href="/static/dist/css/index/contentanalysis.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+{#    <link href="{% static 'spider/bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">#}
+
+    <!-- DataTables CSS -->
+    <link href="/static/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+{#    <link href="{% static 'spider/bower_components/datatables-responsive/css/dataTables.responsive.css' %}" rel="stylesheet">#}
+
+    <!-- Custom CSS -->
+{#    <link href="{% static 'spider/dist/css/sb-admin-2.css' %}" rel="stylesheet">#}
+
+    <!-- Custom Fonts -->
+{#    <link href="{% static 'spider/bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">#}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/static/dist/js/jquery-2.0.3.min.js"></script>
+{#    <script type="text/javascript" src="{% static 'spider/js/csrf.js' %}"></script>#}
+    <script>
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+    </script>
+    <script type="text/javascript" src="/static/dist/js/index/contentanalysis.js"></script>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div style="padding-left: 2%; padding-right: 2%">
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">分析结果
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body" id="{{ id_ }}">
+                            <div class="row">
+                                <div class="col-lg-12" id="fenci_content">
+                                    <h2>{{ news_title }}</h2>
+                                    {% for sentence in cutResult %}
+                                        <div class="fenci row">
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                            {% for one_word  in sentence %}
+                                                <p class="n{{ one_word.tag }} get_text" id="{{ one_word.num }}">{{ one_word.word }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="row frame">
+                                <div class="col-lg-6 fenci">
+                                    <table class="table table-striped table-bordered" id="analysis_relationship_result_table">
+                                        <caption>关系提取结果</caption>
+                                        <thead>
+                                            <tr>
+{#                                                <th>时间</th>#}
+                                                <th>对象一</th>
+                                                <th>关系</th>
+                                                <th>对象二</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="relationship_extract_result">
+                                            {% for item in relationship_extract_result %}
+                                                <tr>
+{#                                                    <td class="time">{{ item.time }}</td>#}
+                                                    <td class="object_from">{{ item.object_from_name }}</td>
+                                                    <td class="object_event">{{ item.object_relationship_name }}</td>
+                                                    <td class="object_to">{{ item.object_to_name }}</td>
+                                                    <td><input type="button" class="btn btn-default" id="delete_relationship_btn" value="删除关系"></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-striped table-bordered" id="analysis_event_result_table">
+                                        <caption>事件提取结果</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>时间</th>
+                                                <th>地点</th>
+                                                <th>事件主体</th>
+                                                <th>事件名</th>
+                                                <th>事件客体</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="event_extract_result">
+                                            {% for item in event_extract_result %}
+                                                <tr>
+                                                    <td class="time">{{ item.actual_event_time }}</td>
+                                                    <td class="location">{{ item.location }}</td>
+                                                    <td class="event_subject">{{ item.eventSubject }}</td>
+                                                    <td class="event_name">{{ item.eventName }}</td>
+                                                    <td class="event_object">{{ item.eventObject }}</td>
+                                                    <td><input type="button" class="btn btn-default" id="delete_event_btn" value="删除事件"></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+{#                                    <input type="button" class="btn btn-default" id="synchronous_btn" value="数据同步">#}
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row color-label">
+                                        <p class="n0">不相关名词</p>
+                                        <p class="n1">关键字</p>
+                                        <p class="n2">相关名词</p>
+                                        <p class="n3">时间词</p>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="active add_word_li"><a>添加用词</a></li>
+				                        <li class="add_relationship_li"><a>添加关系</a></li>
+                                        <li class="add_event_li"><a>添加事件</a></li>
+                                    </ul>
+                                    <div style="display: block" class="add_word_div">
+                                        <form class="form-horizontal" role="form">
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 form_label" for="added_word">术语:</label>
+                                                <div class="col-sm-6">
+                                                    <textarea class="form-control add_word_textarea" rows="1" id="added_word"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 form_label" for="word_type">术语类型:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" id="select_word_type">
+                                                        {% for item in category %}
+                                                            <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <input class="add_word btn btn-default" type="button" value="导入术语">
+                                    </div>
+                                    <div style="display: none" class="add_relationship_div">
+                                        <div class="row">
+                                            <div class="col-md-4 relationship_word_transfer_input_div">
+                                                <textarea class="form-control get_word_textarea relationship_textarea" id="get_relationship_word_textarea" name="" cols="" rows="5" style="resize:none;" disabled></textarea>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" id="btn-input3" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control relationship_textarea" id="object_from_textarea" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" id="btn-input4" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control relationship_textarea" id="relationship_textarea" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" id="btn-input5" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control relationship_textarea" id="object_to_textarea" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form class="form-horizontal" role="form" style="padding-top: 15px;">
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 form_label" for="relationship_type">关系类型:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" id="relationship_type">
+                                                        {% for item in relationship %}
+                                                            <option data-id="{{ item.id }}">{{ item.attribute_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+    {#                                            <input class="relationship_time form-control" type="date" style="width: 150px;">#}
+                                        </form>
+                                        <input class="add_relationship btn btn-default" type="button" value="添加关系">
+                                    </div>
+                                    <div style="display: none" class="add_event_div">
+                                        <div class="row">
+                                            <div class="col-md-4 event_word_transfer_input_div">
+                                                <textarea class="form-control get_word_textarea event_textarea" id="get_event_word_textarea" name="" cols="" rows="5" style="resize:none;" disabled></textarea>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control event_textarea" id="event_time_key_word" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control event_textarea" id="event_place_key_word" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control event_textarea" id="event_subject_key_word" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control event_textarea" id="event_trigger_word" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row word_transfer_output_div">
+                                                    <div class="col-md-3">
+                                                        <input class="btn-input btn btn-default" type="button" value=">>">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <textarea class="textarea-input form-control event_textarea" id="event_object_key_word" style="resize:none;" name="" cols="" rows="" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form class="form-horizontal" role="form" style="padding-top: 15px;">
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 form_label" for="actual_event_time">具体时间:</label>
+                                                <div class="col-sm-6">
+                                                    <input class="actual_event_time form-control" type="date">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 form_label" for="select_event_type">事件类型:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" id="select_event_type">
+                                                        {% for item in eventCategoryName %}
+                                                            <option data-id="{{ item.id }}">{{ item.category_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+    {#                                            <input class="relationship_time form-control" type="date" style="width: 150px;">#}
+                                        </form>
+                                        <input class="add_event btn btn-default" type="button" value="添加事件">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <script>
+        function rc(){
+           return parseInt(Math.random()*256);
+        }
+        let tag_category = {{ tagCategory|safe }};
+        console.log(tag_category);
+        let color_label = $(".color-label");
+        color_label.children().not(":first").remove();
+        for (let i=0;i<tag_category.length;i++){
+            $("<p class='n" + tag_category[i]["tag"] + "'>" + tag_category[i]["category"] + "</p>").appendTo(color_label);
+            $(".n" + tag_category[i]["tag"]).css("background-color", "rgb("+rc()+","+rc()+","+rc()+")");
+        }
+    </script>
+    <!-- jQuery -->
+</body>
+
+</html>

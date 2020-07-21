@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>知识图谱构建系统</title>
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+    <script src="/static/dist/js/csrf.js"></script>
+    <script src="/static/dist/js/login.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/login.css">
+</head>
+<body>
+<div id="header">
+        <div class="title">
+            <strong>知识图谱构建系统</strong>
+        </div>
+</div>
+<div class="Wrap">
+    <div class="center">
+        <div class="center_form">
+            <div class="center_form_top">
+                <span style="font-size: 30px;">用户登录</span>
+            </div>
+            <form id="login_form">
+                {% csrf_token %}
+                <ul style="padding: 0px;">
+                    <li>
+                        <div class="username">
+                            <div class="labelOver"><label>用户名：</label></div>
+                            <div class="inputOver"> <input type="text" id="username" name="username" maxlength="20" /></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="password">
+                             <div class="labelOver"><label>密&nbsp&nbsp&nbsp码：</label></div>
+                            <div class="inputOver"><input type="password" id="password" name="password" maxlength="20" /></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="login_btn">
+                            <button style="width: 110px;height: 45px;">登录</button>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

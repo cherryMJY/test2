@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>知识图谱构建系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables css -->
+    <link rel="stylesheet" href="/static/datatables/media/css/dataTables.bootstrap.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="/static/dist/js/jquery-2.0.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- DataTables js-->
+    <script src="/static/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/static/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="/static/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script src="/static/dist/js/index/spider.js"></script>
+
+    <!-- Custom Fonts -->
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
+{#    <link href="{% static 'spider/bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">#}
+
+    <link rel="stylesheet" href="/static/bootstrap-toggle/css/bootstrap-toggle.min.css">
+    <link rel="stylesheet" href="/static/dist/css/buttons.css">
+
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/header.css">
+
+    <link type="text/css" rel="stylesheet" href="/static/dist/css/index/spider.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper">
+        {% include "header.html" %}
+        {% include "sidebar.html" %}
+        <div class="col-sm-10 main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <h2>
+                        <ul class="breadcrumb breadcrumbs_ul">
+                            <li><a href="/index/knowledge_acquire">获取数据</a></li>
+                            <li class="active">爬虫</li>
+                        </ul>
+                    </h2>
+                </div>
+                <div class="row add_spider">
+                    <div class="global-btn clearfix">
+                        <div class="create-btn-div">
+                            <input class="project-create btn btn-default btn-primary" value="新增爬虫" type="button" data-toggle="modal" data-target="#myModal" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="dataTable_wrapper">
+                        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>项目编号</th>
+                                    <th>目标网站</th>
+                                    <th>获取数据类型</th>
+                                    <th>运行状态</th>
+{#                                    <th data-type="num">创建者</th>#}
+                                    <th data-type="num">数据统计</th>
+                                    <th data-type="num">执行操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+{#                            <tr data-name="1">#}
+{#                                <td class="project-group"><span class="editable editable-click editable-empty">1</span></td>#}
+{#                                <td class="project-name"><span>1</span></td>#}
+{#                                <td class="project-status">#}
+{#                                    <input id="toggle-trigger1" type="checkbox" onchange="toggleChange(1)" checked data-toggle="toggle" data-on="开启" data-off="关闭" data-onstyle="success" data-offstyle="danger">#}
+{#                                </td>#}
+{#                                <td class="project-progress progress-all">#}
+{#                                  <span>1</span>#}
+{#                                </td>#}
+{#                                <td class="project-progress progress-all">#}
+{#                                    <span id="project_statistics_1">project.statistics</span>#}
+{#                                            <button class="btn-circle" style="background: none; outline:0 none !important; blr:expression(this.onFocus=this.blur()); " title="刷新统计数据" onclick="refresh_project_statistics({{ project.id }})">↻</button>#}
+{#                                    <button class="button button-small button-glow button-border button-rounded button-primary button-circle" title="刷新统计数据" onclick="refresh_project_statistics({{ project.id }})">↻</button>#}
+{#                                </td>#}
+{#                                <td class="project-actions" >#}
+{#                                    <a class="btn btn-default btn-group-xs" target="_blank" href="/spider/runningresults?id=1">查看运行结果</a>#}
+{#                                    <a class="btn btn-default btn-group-xs" target="_blank" href="/spider/shopresults?id=1">查看爬虫数据</a>#}
+{#                                    <input type="button" class="btn btn-default btn-group-xs batch-upload" id="1" value="批量上传数据">#}
+{#                                </td>#}
+{#                              </tr>#}
+                            {% for project in project_list %}
+                              <tr data-id="{{ project.id }}">
+                                <td class="project-group"><span class="editable editable-click editable-empty">{{ project.id }}</span></td>
+                                <td class="project-name"><span>{{ project.data_website }}</span></td>
+                                <td class="project-name"><span>{{ project.spider_datatype }}</span></td>
+                                <td class="project-status">
+                                    {% if project.status == 0 %}
+                                        <input id="toggle-trigger{{ project.id }}" type="checkbox" onchange="toggleChange({{ project.id }})" data-toggle="toggle" data-on="开启" data-off="关闭" data-onstyle="success" data-offstyle="danger">
+                                    {% else %}
+                                        <input id="toggle-trigger{{ project.id }}" type="checkbox" onchange="toggleChange({{ project.id }})" checked data-toggle="toggle" data-on="开启" data-off="关闭" data-onstyle="success" data-offstyle="danger">
+                                    {% endif %}
+                                </td>
+{#                                <td class="project-progress progress-all">#}
+{#                                  <span>{{ project.editor }}</span>#}
+{#                                </td>#}
+                                <td class="project-progress progress-all">
+                                    <span id="project_statistics_{{ project.id }}">{{ project.spider_statistics }}</span>
+{#                                            <button class="btn-circle" style="background: none; outline:0 none !important; blr:expression(this.onFocus=this.blur()); " title="刷新统计数据" onclick="refresh_project_statistics({{ project.id }})">↻</button>#}
+                                    <button class="button button-small button-glow button-border button-rounded button-primary button-circle" title="刷新统计数据" onclick="refresh_project_statistics({{ project.id }})">↻</button>
+                                </td>
+                                <td class="project-actions" >
+                                    <a class="btn btn-default btn-group-xs" target="_blank" href="/spider/runningresults?id={{ project.id }}">查看运行结果</a>
+                                    <a class="btn btn-default btn-group-xs" target="_blank" href="/spider/shopresults?id={{ project.id }}">查看爬虫数据</a>
+                                    <input type="button" class="btn btn-default btn-group-xs batch-upload" id="{{ project.id }}" value="批量上传数据">
+                                </td>
+                              </tr>
+                            {% empty %}
+{#                                        <td>当前没有爬虫项目可运行!!!</td>#}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- 模态框1，新增类目 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        添加爬虫
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="spider_data_website" class="col-sm-2 control-label">爬取网站</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="spider_data_website">
+                                    {% for item in data_website_list %}
+                                        <option data-id="{{ item.id }}">{{ item.website_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="spider_data_type" class="col-sm-2 control-label">爬取内容</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="spider_data_type">
+                                    {% for item in data_type_list %}
+                                        <option data-id="{{ item.id }}">{{ item.data_type_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="add_project">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+        $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                    responsive: true
+            });
+        });
+    </script>
+    <script>
+        function toggleChange(id) {
+            let project_status;
+            if($('#toggle-trigger'+id).prop("checked")){
+                project_status = 1;
+            }else{
+                project_status = 0;
+            }
+            $.post('/index/change_status',
+                {
+                    project_status: project_status,
+                    project_id: id
+                },
+                function (data){
+                    console.log(data);
+                }
+            )
+        }
+        function refresh_project_statistics(project_id) {
+            $.post('/index/refresh_statistics',
+                {
+                    spider_id: project_id
+                },
+                function (data){
+                    if (data.status === "success"){
+                        $("#project_statistics_"+project_id).html(data.msg);
+                    }
+                }
+            )
+            {#$.get("/index/refresh_statistics",{'id':project_id}, function(ret){#}
+            {#    $("#project_statistics_"+project_id).html(ret);#}
+        }
+        {#$(function() {#}
+        {#    $("[data-toggle='popover-error']").each(function() {#}
+        {#        let element = $(this);#}
+        {#        element.popover({#}
+        {#            trigger: 'manual',#}
+        {#            html: true,#}
+        {#            title: '错误提示',#}
+        {#            placement: 'bottom',#}
+        {#            content: {{ project_health_data |safe }}#}
+        {#        }).on("mouseenter", function() {#}
+        {#            let _this = this;#}
+        {#            $(this).popover("show");#}
+        {#            $(this).siblings(".popover").on("mouseleave", function() {#}
+        {#                $(_this).popover('hide');#}
+        {#            });#}
+        {#        }).on("mouseleave", function() {#}
+        {#            let _this = this;#}
+        {#            setTimeout(function() {#}
+        {#                if(!$(".popover:hover").length) {#}
+        {#                    $(_this).popover("hide")#}
+        {#                }#}
+        {#            }, 100);#}
+        {#        });#}
+        {#    });#}
+        {#    $("[data-toggle='popover-success']").each(function() {#}
+        {#        let element = $(this);#}
+        {#        element.popover({#}
+        {#            trigger: 'manual',#}
+        {#            html: true,#}
+        {#            title: '爬虫数据统计',#}
+        {#            placement: 'bottom',#}
+        {#            content: {{ project_statistics_data |safe }},#}
+        {#        }).on("mouseenter", function() {#}
+        {#            let _this = this;#}
+        {#            $(this).popover("show");#}
+        {#            $(this).siblings(".popover").on("mouseleave", function() {#}
+        {#                $(_this).popover('hide');#}
+        {#            });#}
+        {#        }).on("mouseleave", function() {#}
+        {#            let _this = this;#}
+        {#            setTimeout(function() {#}
+        {#                if(!$(".popover:hover").length) {#}
+        {#                    $(_this).popover("hide")#}
+        {#                }#}
+        {#            }, 100);#}
+        {#        });#}
+        {#    });#}
+        {#});#}
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+.breadcrumbs_ul{
+    background-color: unset!important;
+}
+.rule_tr{
+    background-color: #dadbdd;
+}
+.category_select_div{
+    margin-bottom: 20px;
+}
+.category_select_label{
+    text-align: left!important;
+}
+
+.no_data_div{
+    color: #aeabab;
+    border-bottom: 1px solid #ddd;
+    min-height: 35px;
+    text-align: center;
+}

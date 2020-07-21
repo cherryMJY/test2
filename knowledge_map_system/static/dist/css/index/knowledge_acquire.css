@@ -1,0 +1,25 @@
+.category_title{
+    height: 50px;
+    line-height: 50px;
+}
+.category_title > span{
+    padding-left: 10px;
+}
+.tag{
+    color: #337ab7;
+}
+
+.btn_div{
+    height: 75px;
+    line-height: 75px;
+}
+
+.btn_div > input{
+    width:120px;
+}
+#myModal{
+    z-index: 3000;
+}
+#myModal2{
+    z-index: 3000;
+}

@@ -1,0 +1,46 @@
+.breadcrumbs_ul{
+    background-color: unset!important;
+}
+.my-gallery-container{
+    padding-top: 4px;
+    column-count: 3;
+    column-gap: 18px;
+}
+.card{
+    display: inline-block;
+    margin-top: 21px;
+    width: 386px;
+    /*background: #FFFFFF;*/
+    /*border-radius: 15px;*/
+    break-inside: avoid;
+    padding-bottom: 20px;
+
+    /*box-shadow: 5px 0 20px 0 rgba(0,0,0,.05);*/
+    /*border: 1px solid rgba(0,0,0,.125);*/
+    border-radius: .25rem;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+}
+
+.card-body{
+    border-radius: 15px;
+    box-shadow: 5px 0 20px 0 rgba(0,0,0,.05);
+    border: 1px solid rgba(0,0,0,.125);
+    padding: 1.25rem;
+}
+
+.pagination{
+    float: right;!important;
+}
+.extract_result{
+    border-top: 1px solid rgba(0,0,0,.1);
+    text-align: center;
+}
+.extract_result > h4{
+    text-align: left;
+}
+.extract_detail{
+    float: right;
+}
